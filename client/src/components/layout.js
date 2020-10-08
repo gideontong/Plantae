@@ -1,18 +1,12 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
+import React from 'react';
+import PropTypes from 'prop-types';
+import SEO from '../components/seo';
+import '../styles/antd.css';
 
-import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql } from 'gatsby';
+import { BackTop, Typography } from 'antd';
 
-import Header from "./header"
-import "./layout.css"
-
-const Layout = ({ children }) => {
+const Layout = ({ children, home }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -21,33 +15,53 @@ const Layout = ({ children }) => {
         }
       }
     }
-  `)
+  `);
+
+  const classes = {
+    main: {
+      display: 'flex',
+      flexDirection: 'column',
+      margin: '0 auto',
+      minHeight: '100vh',
+      maxWidth: '680px',
+      paddingTop: '5rem',
+      paddingBottom: '2rem',
+      paddingLeft: '3rem',
+      paddingRight: '3rem'
+    },
+    footer: {
+      padding: '2rem',
+      marginTop: 'auto',
+      backgroundColor: '#eeeeee',
+      textAlign: 'center'
+    }
+  };
+
+  const Copyright = () => (
+    <Typography variant='body2' color='textSecondary'>
+      {'Copyright © '}
+      <a color='inherit' href='https://github.com/gideontong/kiwi-hackathon'>
+        Kosher Kiwis
+      </a>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer style={{
-          marginTop: `2rem`
-        }}>
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
+      <BackTop />
+      <SEO title={data?.site?.siteMetadata?.title} />
+      <main style={classes.main}>{children}</main>
+      <footer style={classes.footer}>
+        <Copyright />
+      </footer>
     </>
-  )
-}
+  );
+};
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-}
+  children: PropTypes.node.isRequired
+};
 
-export default Layout
+export default Layout;
