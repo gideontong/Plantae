@@ -41,7 +41,7 @@ class PlantAPI:
         return df
 
     def get_indiv_plant(self):
-        response = requests.get('https://trefle.io/api/v1/species/158178?token=sHaKkHlGA4rIqiyIpDsm7J2LzWVWo3ZRNRTCb9vWI6Q')
+        response = requests.get('https://trefle.io/api/v1/species/158178?token=' + self.access_token)
         response = response.json()
         # Dict keys = data, links, meta
         print(response.keys())
