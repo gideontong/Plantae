@@ -10,7 +10,7 @@ def search():
     '''
     Returns a JSON object with the number of results and a key to repeat the same search or get results.
     '''
-    return '{"results":0,"key":0}'
+    return '{"results":0,"key":"0"}'
 
 @app.route('/results')
 def search_results():
