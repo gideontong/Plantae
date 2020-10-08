@@ -1,5 +1,18 @@
+# Web Endpoint Setup
 from flask import Flask
 app = Flask(__name__)
+
+# Local Library Imports
+from lib.Configurator import Configurator as Config
+from lib.PlantAPI import PlantAPI as API
+from lib.SearchCache import SearchCache as Cache
+
+def main():
+    config = Config()
+    cache = Cache(1000)
+    api = API(config.token)
+
+main()
 
 @app.route('/')
 def index():
