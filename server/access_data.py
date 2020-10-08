@@ -33,7 +33,8 @@ class PlantAPI:
                                  + foliage_color
                                  + '&filter[fruit_color]='
                                  + fruit_color
-)
+        )
+        
         response = response.json()
         # Dict keys = data, links, meta
         # print(response.keys())
