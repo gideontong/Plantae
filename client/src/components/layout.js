@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SEO from '../components/seo';
+import SEO from './seo';
 import '../styles/antd.css';
+import Header from './header';
 
 import { useStaticQuery, graphql } from 'gatsby';
 import { BackTop, Typography } from 'antd';
 
-const Layout = ({ children, home }) => {
+const Layout = ({ children, home, sub }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -30,7 +31,7 @@ const Layout = ({ children, home }) => {
       paddingRight: '3rem'
     },
     footer: {
-      padding: '2rem',
+      padding: '1rem',
       marginTop: 'auto',
       backgroundColor: '#eeeeee',
       textAlign: 'center'
@@ -40,7 +41,12 @@ const Layout = ({ children, home }) => {
   const Copyright = () => (
     <Typography variant='body2' color='textSecondary'>
       {'Copyright © '}
-      <a color='inherit' href='https://github.com/gideontong/kiwi-hackathon'>
+      <a
+        color='inherit'
+        rel='noreferrer'
+        target='_blank'
+        href='https://github.com/gideontong/kiwi-hackathon'
+      >
         Kosher Kiwis
       </a>{' '}
       {new Date().getFullYear()}
@@ -48,10 +54,13 @@ const Layout = ({ children, home }) => {
     </Typography>
   );
 
+  const headerProps = { sub };
+
   return (
     <>
       <BackTop />
       <SEO title={data?.site?.siteMetadata?.title} />
+      {!home && <Header {...headerProps} />}
       <main style={classes.main}>{children}</main>
       <footer style={classes.footer}>
         <Copyright />
