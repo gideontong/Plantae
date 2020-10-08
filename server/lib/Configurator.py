@@ -1,6 +1,6 @@
-from configparser import ConfigParser as parser
+from json import loads as load
 
 class Configurator:
     def __init__(self):
-        config = parser().read('config/hackathon.cfg')
-        self.token = config['TREFLE']['ACCESS_TOKEN']
+        config = load(open('config/secrets.json').read())
+        self.token = config['token']
