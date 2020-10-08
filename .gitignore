@@ -1,1 +1,14 @@
+# Secrets
 hackathon.cfg
+
+# Workspace
+.vscode
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
