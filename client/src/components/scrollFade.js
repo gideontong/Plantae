@@ -1,12 +1,12 @@
 import React from 'react';
 import { Parallax } from 'rc-scroll-anim';
 
-const classes = {
-  paraCont: { marginTop: '5rem', paddingTop: '4rem' }
-};
-
 const ScrollFade = ({ children, left }) => {
   const transX = 50;
+  const classes = {
+    paraCont: { marginTop: '5rem', paddingTop: '4rem' }
+  };
+
   return (
     <div style={classes.paraCont}>
       <Parallax

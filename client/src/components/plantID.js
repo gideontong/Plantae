@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Typography } from 'antd';
+import useMobile from '../hooks/useMobile';
 
 const data = [
   {
@@ -35,28 +36,24 @@ const data = [
 ];
 
 const PlantID = () => {
-  const [width, setWidth] = useState(null);
-
-  useEffect(() => setWidth(window.innerWidth), []);
-
+  const mobile = useMobile();
   const { Title, Text } = Typography;
+
+  const classes = {
+    container: {
+      display: 'flex',
+      flexDirection: mobile ? 'column' : 'row',
+      alignItems: 'center',
+      marginBottom: '1rem'
+    },
+    emoji: { fontSize: '5rem', flex: 1, marginRight: '1rem' }
+  };
 
   return (
     <>
       {data.map(({ emoji, species, cred, summ, syn }) => (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: width < 550 ? 'column' : 'row',
-            alignItems: 'center',
-            marginBottom: '1rem'
-          }}
-        >
-          <Typography
-            style={{ fontSize: '5rem', flex: 1, marginRight: '1rem' }}
-          >
-            {emoji}
-          </Typography>
+        <div style={classes.container}>
+          <Typography style={classes.emoji}>{emoji}</Typography>
           <div style={{ flex: 5 }}>
             <Title level={4} style={{ marginBottom: 0 }}>
               <i>{species}</i>
@@ -65,7 +62,7 @@ const PlantID = () => {
             <br />
             <Text>{summ}</Text>
             <br />
-            <Text>{syn}</Text>
+            <Text type='secondary'>{syn}</Text>
           </div>
         </div>
       ))}

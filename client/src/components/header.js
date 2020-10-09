@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, navigate } from 'gatsby';
 import { PageHeader, Button } from 'antd';
+import useMobile from '../hooks/useMobile';
 
 const Header = ({ sub }) => {
-  const [width, setWidth] = useState(null);
+  const mobile = useMobile();
 
   const goBack = () => {
     navigate(-1);
   };
-
-  useEffect(() => setWidth(window.innerWidth), []);
 
   return (
     <PageHeader
@@ -17,13 +16,13 @@ const Header = ({ sub }) => {
       subTitle={sub}
       onBack={goBack}
       extra={[
-        <Link to='/search'>
-          <Button type='primary'>Search</Button>
+        <Link to='/id'>
+          <Button type='primary'>Identify</Button>
         </Link>,
         <Link to='/'>
           <Button type='default'>Home</Button>
         </Link>,
-        width > 500 && (
+        !mobile && (
           <Button type='default'>
             <a
               target='_blank'

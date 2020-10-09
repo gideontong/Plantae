@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SEO from './seo';
-import '../styles/antd.css';
 import Header from './header';
+import '../styles/antd.css';
 
 import { useStaticQuery, graphql } from 'gatsby';
 import { BackTop, Typography } from 'antd';
