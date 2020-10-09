@@ -1,4 +1,24 @@
+# Secrets
+hackathon.cfg
+secrets.json
+
+# Workspace
+.vscode
 hackathon.cfg
 client/.firebaserc
 client/firebase.json
 client/.firebase
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Cache
+__pycache__/
+*.py[cod]
+*$py.class
