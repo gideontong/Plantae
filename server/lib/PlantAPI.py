@@ -18,3 +18,11 @@ class PlantAPI:
             for key, value in kwargs.items():
                 request_uri += f'filter[{key}]={value}&'
             return request('GET', request_uri).json()
+
+    def get_first_plant(self, **kwargs):
+        '''
+        The thing.
+        '''
+        search = self.search(**kwargs)
+        entry = search['data'][0]['links']['self']
+        return request('GET', DOMAIN + entry + f'?token={self.token}').json()
