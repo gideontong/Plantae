@@ -1,18 +1,19 @@
 # Web Endpoint Setup
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
+
+# System Library Imports
+from json import dumps
 
 # Local Library Imports
 from lib.Configurator import Configurator as Config
 from lib.PlantAPI import PlantAPI as API
 from lib.SearchCache import SearchCache as Cache
+from lib.util import gen_string
 
-def main():
-    config = Config()
-    cache = Cache(1000)
-    api = API(config.token)
-
-main()
+config = Config()
+cache = Cache(1000)
+api = API(config.token)
 
 @app.route('/')
 def index():
@@ -23,7 +24,15 @@ def search():
     '''
     Returns a JSON object with the number of results and a key to repeat the same search or get results.
     '''
-    return '{"results":0,"key":"0"}'
+    results = {
+        "results": 0,
+        "key": ""
+    }
+    if 'key' in request.args:
+        results['key'] = request.args['key']
+    else:
+        results['key'] = gen_string(cache.cache)
+    return dumps(results)
 
 @app.route('/results')
 def search_results():
