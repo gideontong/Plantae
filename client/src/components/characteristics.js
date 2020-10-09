@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Typography } from 'antd';
+import useMobile from '../hooks/useMobile';
 
 const data = [
   {
@@ -34,9 +35,8 @@ const data = [
 ];
 
 const Characteristics = () => {
-  const [width, setWidth] = useState(null);
-
-  useEffect(() => setWidth(window.innerWidth), []);
+  const mobile = useMobile();
+  const { Title, Text } = Typography;
 
   const classes = {
     emoji: {
@@ -47,13 +47,11 @@ const Characteristics = () => {
     },
     container: {
       display: 'flex',
-      flexDirection: width < 550 ? 'column' : 'row',
+      flexDirection: mobile ? 'column' : 'row',
       alignItems: 'center',
       marginBottom: '1rem'
     }
   };
-
-  const { Title, Text } = Typography;
 
   return (
     <>

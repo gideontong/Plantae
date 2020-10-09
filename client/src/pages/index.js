@@ -3,9 +3,10 @@ import Layout from '../components/layout';
 import PlantID from '../components/plantID';
 import ScrollFade from '../components/scrollFade';
 import Characteristics from '../components/characteristics';
+import SearchIdentify from '../components/searchIdentify.js';
 
 import { DownOutlined } from '@ant-design/icons';
-import { Button, Space, Typography } from 'antd';
+import { Button, Space, Typography, Divider } from 'antd';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 
 const IndexPage = () => {
@@ -38,8 +39,10 @@ const IndexPage = () => {
     <Layout home>
       <Title style={classes.header}>{data?.site?.siteMetadata?.title}</Title>
       <Title level={2}>{data?.site?.siteMetadata?.description}</Title>
+      <Divider />
+
       <Space>
-        <Link to='/search'>
+        <Link to='/id'>
           <Button type='primary'>Get Started</Button>
         </Link>
         <Button onClick={executeScroll}>
@@ -52,14 +55,20 @@ const IndexPage = () => {
         <Title level={3}>
           1 million plant species, right at your fingertips
         </Title>
+        <Divider />
         <PlantID />
       </ScrollFade>
       <ScrollFade left>
-        <Title level={3}>
-          View a multitude of characteristics about each one
-        </Title>
+        <Title level={3}>View a multitude of information about each one</Title>
+        <Divider />
         <Characteristics />
       </ScrollFade>
+      <SearchIdentify />
+      <Space style={{ justifyContent: 'center' }}>
+        <Link to='/id'>
+          <Button type='primary'>Start Discovering</Button>
+        </Link>
+      </Space>
     </Layout>
   );
 };
