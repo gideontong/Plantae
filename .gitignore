@@ -4,6 +4,10 @@ secrets.json
 
 # Workspace
 .vscode
+hackathon.cfg
+client/.firebaserc
+client/firebase.json
+client/.firebase
 
 # Environment
 .env

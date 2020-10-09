@@ -1,18 +1,41 @@
-import { Link } from 'gatsby';
-import PropTypes from 'prop-types';
 import React from 'react';
-import { PageHeader } from 'antd';
+import { Link, navigate } from 'gatsby';
+import { PageHeader, Button } from 'antd';
+import useMobile from '../hooks/useMobile';
 
-const Header = ({ home, title }) => {
-  return <PageHeader title={!home && title} />;
-};
+const Header = ({ sub }) => {
+  const mobile = useMobile();
 
-Header.propTypes = {
-  siteTitle: PropTypes.string
-};
+  const goBack = () => {
+    navigate(-1);
+  };
 
-Header.defaultProps = {
-  siteTitle: ``
+  return (
+    <PageHeader
+      title={'Plantae 🌱'}
+      subTitle={sub}
+      onBack={goBack}
+      extra={[
+        <Link to='/id'>
+          <Button type='primary'>Identify</Button>
+        </Link>,
+        <Link to='/'>
+          <Button type='default'>Home</Button>
+        </Link>,
+        !mobile && (
+          <Button type='default'>
+            <a
+              target='_blank'
+              rel='noreferrer'
+              href='https://github.com/gideontong/kiwi-hackathon'
+            >
+              GitHub
+            </a>
+          </Button>
+        )
+      ]}
+    />
+  );
 };
 
 export default Header;
