@@ -46,4 +46,19 @@ def get_plant():
     '''
     Returns a JSON object of the first plant in the search results or a specific plant given a key.
     '''
-    return '{"plant":{}}'
+    result = {
+    }
+    if 'search' not in request.args:
+        return dumps(result)
+    if request.args['search'] in cache.cache:
+        result = cache.get(request.args['search'])
+    else:
+        plant = api.get_first_plant(q=request.args['search'])['data']
+        for id in config.copy:
+            result[id] = plant[id]
+        result['flower_color'] = plant['flower']['color']
+        result['foliage_color'] = plant['foliage']['color']
+        result['fruit_or_seed_color'] = plant['fruit_or_seed']['color']
+        result['toxicity'] = config.toxicity_map[plant['specifications']['toxicity'] if plant['specifications']['toxicity'] else 'none']
+        cache.add(request.args['search'], result)
+    return dumps(result)
