@@ -19,8 +19,8 @@ const Header = ({ sub }) => {
         <Link to='/id'>
           <Button type='primary'>Identify</Button>
         </Link>,
-        <Link to='/'>
-          <Button type='default'>Home</Button>
+        <Link to='/search'>
+          <Button type='default'>Search</Button>
         </Link>,
         !mobile && (
           <Button type='default'>

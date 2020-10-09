@@ -34,11 +34,8 @@ const IdForm = () => {
   };
 
   const backClick = () => {
-    setNext(true);
     setStep(step - 1);
   };
-
-  const finishClick = () => {};
 
   const classes = {
     select: { width: 190, marginTop: '1rem' },
