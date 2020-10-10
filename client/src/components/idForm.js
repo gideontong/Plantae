@@ -13,7 +13,6 @@ import {
 } from 'antd';
 
 const IdForm = () => {
-  const [next, setNext] = useState(true);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -34,11 +33,8 @@ const IdForm = () => {
   };
 
   const backClick = () => {
-    setNext(true);
     setStep(step - 1);
   };
-
-  const finishClick = () => {};
 
   const classes = {
     select: { width: 190, marginTop: '1rem' },
@@ -150,13 +146,8 @@ const IdForm = () => {
           marginTop: '2rem'
         }}
       >
-        <Button
-          disabled={!next}
-          loading={loading}
-          type='primary'
-          onClick={nextClick}
-        >
-          {step === questions.length - 1 ? 'Finish' : 'Next'}
+        <Button loading={loading} type='primary' onClick={nextClick}>
+          {step === questions.length - 1 ? 'Submit' : 'Next'}
         </Button>
         {step > 0 && (
           <Button type='default' onClick={backClick} disabled={loading}>

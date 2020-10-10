@@ -8,9 +8,9 @@ const SearchIdentify = () => {
 
   return (
     <Parallax
-      animation={{ blur: '0px', playScale: [0, 0.6] }}
+      animation={{ opacity: 1, playScale: [0.3, 0.9] }}
       style={{
-        filter: 'blur(15px)',
+        opacity: 0,
         marginTop: '7rem',
         marginBottom: '5rem'
       }}
