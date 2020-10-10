@@ -23,6 +23,13 @@ class PlantAPI:
         '''
         The thing.
         '''
-        search = self.search(**kwargs)
-        entry = search['data'][0]['links']['self']
+        return self.get_plant(0, **kwargs)
+
+    def get_plant(self, i: int, search = {}, **kwargs):
+        '''
+        The thing.
+        '''
+        if len(search) == 0:
+            search = self.search(**kwargs)
+        entry = search['data'][i]['links']['self']
         return request('GET', DOMAIN + entry + f'?token={self.token}').json()

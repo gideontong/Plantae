@@ -9,7 +9,7 @@ from json import dumps
 from lib.Configurator import Configurator as Config
 from lib.PlantAPI import PlantAPI as API
 from lib.SearchCache import SearchCache as Cache
-from lib.util import gen_string
+from lib.util import gen_string, process_result
 
 config = Config()
 cache = Cache(1000)
@@ -32,6 +32,14 @@ def search():
         results['key'] = request.args['key']
     else:
         results['key'] = gen_string(cache.cache)
+    if results['key'] not in cache.cache:
+        next_args = request.args.to_dict(flat=False)
+        if 'key' in next_args:
+            del next_args['key']
+        for item in next_args:
+            next_args[item] = next_args[item][0]
+        cache.add(results['key'], api.search(**next_args))
+    results['results'] = cache.size_of(results['key'])
     return dumps(results)
 
 @app.route('/results')
@@ -39,26 +47,36 @@ def search_results():
     '''
     Returns a JSON object with the results given a search key.
     '''
-    return '{"results":[]}'
+    results = []
+    size = cache.size_of(request.args['key'])
+    if 'key' in request.args and size > 0:
+        search_data = cache.get(request.args['key'])
+        for i, item in enumerate(search_data['data']):
+            id = str(item['id'])
+            if id in cache.cache:
+                results.append(cache.get(id))
+            else:
+                next_data = api.get_plant(i, search_data)['data']
+                results.append(process_result(next_data, config.copy, config.toxicity_map))
+                cache.add(str(next_data['id']), next_data)
+            if i >= 5:
+                break
+    for i in range(len(results) - 1, -1, -1):
+        if results[i] == {}:
+            del results[i]
+    return dumps({'results': results})
 
 @app.route('/plant')
 def get_plant():
     '''
     Returns a JSON object of the first plant in the search results or a specific plant given a key.
     '''
-    result = {
-    }
     if 'search' not in request.args:
-        return dumps(result)
+        return '{}'
     if request.args['search'] in cache.cache:
         result = cache.get(request.args['search'])
     else:
         plant = api.get_first_plant(q=request.args['search'])['data']
-        for id in config.copy:
-            result[id] = plant[id]
-        result['flower_color'] = plant['flower']['color']
-        result['foliage_color'] = plant['foliage']['color']
-        result['fruit_or_seed_color'] = plant['fruit_or_seed']['color']
-        result['toxicity'] = config.toxicity_map[plant['specifications']['toxicity'] if plant['specifications']['toxicity'] else 'none']
+        result = process_result(plant, config.copy, config.toxicity_map)
         cache.add(request.args['search'], result)
     return dumps(result)
