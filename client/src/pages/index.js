@@ -4,6 +4,7 @@ import PlantID from '../components/plantID';
 import ScrollFade from '../components/scrollFade';
 import Characteristics from '../components/characteristics';
 import SearchIdentify from '../components/searchIdentify.js';
+import TweenOne from 'rc-tween-one';
 
 import { DownOutlined } from '@ant-design/icons';
 import { Button, Space, Typography, Divider } from 'antd';
@@ -37,19 +38,47 @@ const IndexPage = () => {
 
   return (
     <Layout home>
-      <Title style={classes.header}>{data?.site?.siteMetadata?.title}</Title>
-      <Title level={2}>{data?.site?.siteMetadata?.description}</Title>
-      <Divider />
+      <TweenOne
+        animation={{
+          opacity: 1,
+          duration: 1000,
+          delay: 800
+        }}
+        style={{ opacity: 0 }}
+      >
+        <Title style={classes.header}>{data?.site?.siteMetadata?.title}</Title>
+      </TweenOne>
+      <TweenOne
+        animation={{
+          opacity: 1,
+          duration: 1000,
+          delay: 2000
+        }}
+        style={{ opacity: 0 }}
+      >
+        <Title level={2}>{data?.site?.siteMetadata?.description}</Title>
+      </TweenOne>
 
-      <Space>
-        <Link to='/id'>
-          <Button type='primary'>Get Started</Button>
-        </Link>
-        <Button onClick={executeScroll}>
-          Learn More
-          <DownOutlined />
-        </Button>
-      </Space>
+      <TweenOne
+        animation={{
+          opacity: 1,
+          duration: 1000,
+          delay: 3000
+        }}
+        style={{ opacity: 0 }}
+      >
+        <Divider />
+        <Space>
+          <Link to='/id'>
+            <Button type='primary'>Get Started</Button>
+          </Link>
+          <Button onClick={executeScroll}>
+            Learn More
+            <DownOutlined />
+          </Button>
+        </Space>
+      </TweenOne>
+
       <div ref={myRef}></div>
       <ScrollFade>
         <Title level={3}>
@@ -66,7 +95,9 @@ const IndexPage = () => {
       <SearchIdentify />
       <Space style={{ justifyContent: 'center' }}>
         <Link to='/id'>
-          <Button type='primary'>Start Discovering</Button>
+          <Button type='primary' size='large'>
+            Let's Go
+          </Button>
         </Link>
       </Space>
     </Layout>

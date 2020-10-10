@@ -17,8 +17,8 @@ const IdentifyPage = () => {
       </Text>
       <Divider />
       <Title level={4}>
-        To accurately identify the plant you've found, you first need to answer
-        a few questions.
+        To accurately identify the plant you've found, please answer the
+        questions below.
       </Title>
       <IdForm />
     </Layout>
