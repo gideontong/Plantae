@@ -1,12 +1,33 @@
 import React, { useState } from 'react';
 import { Typography, Input, Switch, Row, Space, Checkbox, Select } from 'antd';
 
-const SearchForm = () => {
+const TOKEN = '';
+
+const SearchForm = ({ callback }) => {
   const [loading, setLoading] = useState(false);
   const [advanced, setAdvanced] = useState(false);
+  const [error, setError] = useState(null);
   const { Text } = Typography;
   const { Search } = Input;
   const { Option } = Select;
+
+  const search = (query) => {
+    setError(null);
+    if (!query.trim()) {
+      setError('Please enter a search term.');
+      return;
+    }
+    setLoading(true);
+    fetch(`https://trefle.io/api/v1/species/search?q=${query}&token=${TOKEN}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        callback(json.data);
+        setLoading(false);
+      });
+  };
+
   return (
     <>
       <Space direction='vertical' size='middle' style={{ marginTop: '1.5rem' }}>
@@ -18,12 +39,15 @@ const SearchForm = () => {
         </Row>
         <Row>
           <Search
+            maxLength={40}
+            disabled={loading}
             placeholder='Eg. coconut'
             enterButton='Search'
-            onSearch={() => setLoading(!loading)}
+            onSearch={search}
             loading={loading}
           />
         </Row>
+        <Text type='danger'>{error}</Text>
 
         {advanced && (
           <>

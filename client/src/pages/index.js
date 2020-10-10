@@ -96,7 +96,7 @@ const IndexPage = () => {
       <Space style={{ justifyContent: 'center' }}>
         <Link to='/id'>
           <Button type='primary' size='large'>
-            Let's Go
+            Start Learning
           </Button>
         </Link>
       </Space>
