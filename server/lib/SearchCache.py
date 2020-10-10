@@ -20,7 +20,22 @@ class SearchCache:
         '''
         Gets an item from the cache.
         '''
-        return self.cache[key]
+        if key in self.cache:
+            return self.cache[key]
+        else:
+            return {}
+
+    def has(self, key: str) -> bool:
+        return key in self.cache
+
+    def size_of(self, key: str) -> int:
+        '''
+        Get number of results in cache.
+        '''
+        if key in self.cache and 'data' in self.cache[key]:
+            return len(self.cache[key]['data'])
+        else:
+            return 0
 
     def evict(self, key: str) -> dict:
         '''
