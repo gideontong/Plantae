@@ -86,6 +86,14 @@ class PlantAPI:
                           'fruit_or_seed', 'specifications'
                           ]].copy()
         df_plant = df_plant.dropna(how='all')
+        df_plant['flower_color'] = df_plant['flower'][0]['color']
+        df_plant['foliage_color'] = df_plant['foliage'][0]['color']
+        df_plant['fruit_or_seed_color'] = df_plant['fruit_or_seed'][0]['color']
+        df_plant['toxicity'] = df_plant['specifications'][0]['toxicity']
+        del df_plant['flower']
+        del df_plant['foliage']
+        del df_plant['specifications']
+        del df_plant['fruit_or_seed']
         return df_plant
 
     def json_result(self, pd_df):
