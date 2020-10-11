@@ -36,9 +36,37 @@ class PlantAPI:
                                  + '&filter[fruit_color]='
                                  + fruit_color
         )
-        
+
         response = response.json()
         df = pd.DataFrame(response['data'])
+
+
+
+
+        # page_results = []
+        # for pg in range(10):
+        #     response = requests.get( 'https://trefle.io/api/v1/distributions/'
+        #                             + tdw_zone
+        #                              + '/plants?token='
+        #                              + self.access_token
+        #                              + '&filter[flower_color]='
+        #                              + flower_color
+        #                              + '&filter[foliage_color]='
+        #                              + foliage_color
+        #                              + '&filter[fruit_color]='
+        #                              + fruit_color
+        #                              + '&page='
+        #                              + str(pg)
+        #     )
+        #
+        #     response = response.json()
+        #     df = pd.DataFrame(response['data'])
+        #     page_results.append(df)
+        #     df_all = pd.concat(page_results)
+        #     df_all.reset_index(inplace=True)
+        return df
+
+
         return df
 
     def get_indiv_plant(self, species_id):
@@ -57,33 +85,31 @@ class PlantAPI:
                           'flower', 'foliage',
                           'fruit_or_seed', 'specifications'
                           ]].copy()
-        indiv_plant = df_plant.iloc[0]
-        indiv_plant['flower_color'] = indiv_plant['flower']['color']
-        indiv_plant['foliage_color'] = indiv_plant['foliage']['color']
-        indiv_plant['fruit_or_seed_color'] = indiv_plant['fruit_or_seed']['color']
-        indiv_plant['toxicity'] = indiv_plant['specifications']['toxicity']
-        del indiv_plant['flower']
-        del indiv_plant['foliage']
-        del indiv_plant['specifications']
-        del indiv_plant['fruit_or_seed']
-
-        return indiv_plant
+        df_plant = df_plant.dropna(how='all')
+        return df_plant
 
     def json_result(self, pd_df):
         result = pd_df.to_json()
         return result
 
+    def return_all_indiv(self, search_results):
+        unique_df = search_results.drop_duplicates(subset = ["id"])
+        plant_id = unique_df['id'].tolist()
+        all_plants = []
+        for p in plant_id:
+            plant = obj.get_indiv_plant(str(p))
+            clean_plant = obj.transform(plant)
+            all_plants.append(clean_plant)
+        df = pd.concat(all_plants)
+        df.reset_index(inplace=True)
+        return df
+
+
+
 obj = PlantAPI('TREFLE')
 data = obj.get_plants('595', 'white', 'green', 'blue')
 
-
-# Contains basic info on plants filtered by API call
-df = data[['id', 'common_name']].copy()
-# print(df)
-
-# Individual plant information
-plant = obj.get_indiv_plant('158178')
-clean_plant = obj.transform(plant)
-result = obj.json_result(clean_plant)
-print(result)
-
+all_p= obj.return_all_indiv(data)
+# print(all_p)
+result = obj.json_result(all_p)
+# print(result)
