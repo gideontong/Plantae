@@ -71,6 +71,8 @@ class PlantAPI:
         df_plant['foliage_color'] = df_plant['foliage'][0]['color']
         df_plant['fruit_or_seed_color'] = df_plant['fruit_or_seed'][0]['color']
         df_plant['toxicity'] = df_plant['specifications'][0]['toxicity']
+        # Assumption - height is always in cm
+        df_plant['average_height_cm'] = df_plant['specifications'][0]['average_height']['cm']
         del df_plant['flower']
         del df_plant['foliage']
         del df_plant['specifications']
@@ -102,6 +104,5 @@ obj = PlantAPI('TREFLE')
 data = obj.get_plants('595', 'white', 'green', 'red')
 
 
-all_p= obj.return_all_indiv(data)
+all_p = obj.return_all_indiv(data)
 result = obj.json_result(all_p)
-print(result)
