@@ -13,7 +13,6 @@ class PlantAPI:
         config.read('hackathon.cfg')
         self.access_token = config[API]['ACCESS_TOKEN']
 
-### Need to loop through multiple pages
     def get_plants(self, tdw_zone, flower_color, foliage_color, fruit_color):
         '''
         :param tdw_zone:
@@ -24,50 +23,32 @@ class PlantAPI:
                 Method that get JSON from Trefle API on plants in specific region with specific foliage,
                 flower and fruit color. Results used to identify which plant ids to use for plant specific info
         '''
+        total_results = []
+        # for demo sake only looking at first 5 pages, running into error is range > than actual page results
+        for page_num in range(1, 5):
+            url = 'https://trefle.io/api/v1/distributions/' \
+                        + tdw_zone \
+                        + '/plants?token=' \
+                        + self.access_token \
+                        + '&filter[flower_color]=' \
+                        + flower_color \
+                        + '&filter[foliage_color]=' \
+                        + foliage_color \
+                        + '&filter[fruit_color]=' \
+                        + fruit_color \
+                        + '&page=' \
+                        + str(page_num)
+            response = requests.get(url)
+            data = response.json()
+            df = pd.DataFrame(data['data'])
+            total_results.append(df)
 
-        response = requests.get( 'https://trefle.io/api/v1/distributions/'
-                                + tdw_zone
-                                 + '/plants?token='
-                                 + self.access_token
-                                 + '&filter[flower_color]='
-                                 + flower_color
-                                 + '&filter[foliage_color]='
-                                 + foliage_color
-                                 + '&filter[fruit_color]='
-                                 + fruit_color
-        )
+        df_total = pd.concat(total_results)
+        df_total.reset_index(inplace=True)
 
-        response = response.json()
-        df = pd.DataFrame(response['data'])
-
-
-
-
-        # page_results = []
-        # for pg in range(10):
-        #     response = requests.get( 'https://trefle.io/api/v1/distributions/'
-        #                             + tdw_zone
-        #                              + '/plants?token='
-        #                              + self.access_token
-        #                              + '&filter[flower_color]='
-        #                              + flower_color
-        #                              + '&filter[foliage_color]='
-        #                              + foliage_color
-        #                              + '&filter[fruit_color]='
-        #                              + fruit_color
-        #                              + '&page='
-        #                              + str(pg)
-        #     )
-        #
-        #     response = response.json()
-        #     df = pd.DataFrame(response['data'])
-        #     page_results.append(df)
-        #     df_all = pd.concat(page_results)
-        #     df_all.reset_index(inplace=True)
-        return df
+        return df_total
 
 
-        return df
 
     def get_indiv_plant(self, species_id):
         response = requests.get('https://trefle.io/api/v1/species/'+ species_id + '?token=' + self.access_token)
@@ -114,10 +95,13 @@ class PlantAPI:
 
 
 
+
 obj = PlantAPI('TREFLE')
-data = obj.get_plants('595', 'white', 'green', 'blue')
+# data = obj.get_plants('595', 'white', 'green', 'blue')
+
+data = obj.get_plants('595', 'white', 'green', 'red')
+
 
 all_p= obj.return_all_indiv(data)
-# print(all_p)
 result = obj.json_result(all_p)
-# print(result)
+print(result)
