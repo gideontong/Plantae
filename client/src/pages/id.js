@@ -10,7 +10,7 @@ const IdentifyPage = () => {
 
   return (
     <Layout>
-      <Title level={1}>Identify</Title>
+      <Title level={1}>Identify 🔬</Title>
       <Text type='secondary'>
         Already know what you're looking for? Try{' '}
         <Link to='/search'>searching</Link> instead.
