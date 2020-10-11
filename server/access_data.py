@@ -13,7 +13,6 @@ class PlantAPI:
         config.read('hackathon.cfg')
         self.access_token = config[API]['ACCESS_TOKEN']
 
-### Need to loop through multiple pages
     def get_plants(self, tdw_zone, flower_color, foliage_color, fruit_color):
         '''
         :param tdw_zone:
@@ -24,22 +23,32 @@ class PlantAPI:
                 Method that get JSON from Trefle API on plants in specific region with specific foliage,
                 flower and fruit color. Results used to identify which plant ids to use for plant specific info
         '''
+        total_results = []
+        # for demo sake only looking at first 5 pages, running into error is range > than actual page results
+        for page_num in range(1, 5):
+            url = 'https://trefle.io/api/v1/distributions/' \
+                        + tdw_zone \
+                        + '/plants?token=' \
+                        + self.access_token \
+                        + '&filter[flower_color]=' \
+                        + flower_color \
+                        + '&filter[foliage_color]=' \
+                        + foliage_color \
+                        + '&filter[fruit_color]=' \
+                        + fruit_color \
+                        + '&page=' \
+                        + str(page_num)
+            response = requests.get(url)
+            data = response.json()
+            df = pd.DataFrame(data['data'])
+            total_results.append(df)
 
-        response = requests.get( 'https://trefle.io/api/v1/distributions/'
-                                + tdw_zone
-                                 + '/plants?token='
-                                 + self.access_token
-                                 + '&filter[flower_color]='
-                                 + flower_color
-                                 + '&filter[foliage_color]='
-                                 + foliage_color
-                                 + '&filter[fruit_color]='
-                                 + fruit_color
-        )
-        
-        response = response.json()
-        df = pd.DataFrame(response['data'])
-        return df
+        df_total = pd.concat(total_results)
+        df_total.reset_index(inplace=True)
+
+        return df_total
+
+
 
     def get_indiv_plant(self, species_id):
         response = requests.get('https://trefle.io/api/v1/species/'+ species_id + '?token=' + self.access_token)
@@ -57,33 +66,43 @@ class PlantAPI:
                           'flower', 'foliage',
                           'fruit_or_seed', 'specifications'
                           ]].copy()
-        indiv_plant = df_plant.iloc[0]
-        indiv_plant['flower_color'] = indiv_plant['flower']['color']
-        indiv_plant['foliage_color'] = indiv_plant['foliage']['color']
-        indiv_plant['fruit_or_seed_color'] = indiv_plant['fruit_or_seed']['color']
-        indiv_plant['toxicity'] = indiv_plant['specifications']['toxicity']
-        del indiv_plant['flower']
-        del indiv_plant['foliage']
-        del indiv_plant['specifications']
-        del indiv_plant['fruit_or_seed']
-
-        return indiv_plant
+        df_plant = df_plant.dropna(how='all')
+        df_plant['flower_color'] = df_plant['flower'][0]['color']
+        df_plant['foliage_color'] = df_plant['foliage'][0]['color']
+        df_plant['fruit_or_seed_color'] = df_plant['fruit_or_seed'][0]['color']
+        df_plant['toxicity'] = df_plant['specifications'][0]['toxicity']
+        # Assumption - height is always in cm
+        df_plant['average_height_cm'] = df_plant['specifications'][0]['average_height']['cm']
+        del df_plant['flower']
+        del df_plant['foliage']
+        del df_plant['specifications']
+        del df_plant['fruit_or_seed']
+        return df_plant
 
     def json_result(self, pd_df):
         result = pd_df.to_json()
         return result
 
+    def return_all_indiv(self, search_results):
+        unique_df = search_results.drop_duplicates(subset = ["id"])
+        plant_id = unique_df['id'].tolist()
+        all_plants = []
+        for p in plant_id:
+            plant = obj.get_indiv_plant(str(p))
+            clean_plant = obj.transform(plant)
+            all_plants.append(clean_plant)
+        df = pd.concat(all_plants)
+        df.reset_index(inplace=True)
+        return df
+
+
+
+
 obj = PlantAPI('TREFLE')
-data = obj.get_plants('595', 'white', 'green', 'blue')
+# data = obj.get_plants('595', 'white', 'green', 'blue')
+
+data = obj.get_plants('595', 'white', 'green', 'red')
 
 
-# Contains basic info on plants filtered by API call
-df = data[['id', 'common_name']].copy()
-# print(df)
-
-# Individual plant information
-plant = obj.get_indiv_plant('158178')
-clean_plant = obj.transform(plant)
-result = obj.json_result(clean_plant)
-print(result)
-
+all_p = obj.return_all_indiv(data)
+result = obj.json_result(all_p)
