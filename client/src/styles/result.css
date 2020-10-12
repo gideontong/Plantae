@@ -1,0 +1,11 @@
+/* put this in a better place */
+
+.result-item:hover {
+  background-color: #e5ffe3;
+  transition: 0.2s;
+}
+
+.result-item {
+  background-color: #fff;
+  transition: 0.2s;
+}

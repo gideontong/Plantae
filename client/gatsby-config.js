@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `Plantae 🌱`,
-    description: `Identify any plant, anywhere you are.`,
+    description: `Learn more about the plants around you.`,
     author: `@devyboy`
   },
   plugins: [

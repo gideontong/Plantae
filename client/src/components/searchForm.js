@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Typography, Input, Switch, Row, Space, Checkbox, Select } from 'antd';
+import config from '../config';
 
-const TOKEN = '';
+const TOKEN = config.token;
 
 const SearchForm = ({ callback }) => {
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,10 @@ const SearchForm = ({ callback }) => {
       .then((json) => {
         callback(json.data);
         setLoading(false);
+      })
+      .catch((e) => {
+        setError('An error has occurred, check the console for details.');
+        console.log(e);
       });
   };
 

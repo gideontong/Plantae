@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout';
-import { Link } from 'gatsby';
-import { Typography, Divider, Space } from 'antd';
 import SearchForm from '../components/searchForm';
-import ResultCard from '../components/resultCard';
+import '../styles/result.css';
+
+import { Link } from 'gatsby';
+import { RightOutlined } from '@ant-design/icons';
+import { Typography, Divider, List } from 'antd';
 
 const SearchPage = () => {
   const [results, setResults] = useState(null);
+
   const { Title, Text } = Typography;
 
   return (
@@ -25,16 +28,22 @@ const SearchPage = () => {
       {results && (
         <>
           <Divider />
-          <Text type='secondary'>Found {results.length} results.</Text>
-          <Space
-            direction='vertical'
-            size='large'
-            style={{ alignItems: 'center' }}
-          >
-            {results.map((plant) => (
-              <ResultCard {...plant} />
-            ))}
-          </Space>
+          <Title type='secondary' level={5}>
+            Found {results.length} results.
+          </Title>
+          <List
+            bordered
+            dataSource={results}
+            renderItem={(plant) =>
+              plant.slug && (
+                <Link to={`/plant/${plant.slug}`}>
+                  <List.Item className='result-item' extra={<RightOutlined />}>
+                    {plant.common_name}
+                  </List.Item>
+                </Link>
+              )
+            }
+          />
         </>
       )}
     </Layout>

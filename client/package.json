@@ -17,7 +17,9 @@
     "rc-scroll-anim": "^2.7.5",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "react-simple-maps": "^2.1.2",
+    "react-tooltip": "^4.2.10"
   },
   "devDependencies": {
     "prettier": "2.1.2"
