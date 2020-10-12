@@ -6,7 +6,6 @@ import {
   Space,
   Select,
   Typography,
-  Spin,
   Divider,
   Statistic,
   Row
@@ -70,8 +69,12 @@ const IdForm = () => {
           style={classes.select}
           onChange={setFoliageColor}
         >
+          <Option value={'white'}>White</Option>,
+          <Option value={'black'}>Black</Option>,
           <Option value={'green'}>Green</Option>,
+          <Option value={'grey'}>Grey</Option>,
           <Option value={'red'}>Red</Option>,
+          <Option value={'Pink'}>Pink</Option>,
           <Option value={'blue'}>Blue</Option>,
           <Option value={'purple'}>Purple</Option>,
           <Option value={'orange'}>Orange</Option>,
@@ -89,8 +92,12 @@ const IdForm = () => {
           style={classes.select}
           onChange={setFlowerColor}
         >
+          <Option value={'white'}>White</Option>,
+          <Option value={'black'}>Black</Option>,
           <Option value={'green'}>Green</Option>,
+          <Option value={'grey'}>Grey</Option>,
           <Option value={'red'}>Red</Option>,
+          <Option value={'Pink'}>Pink</Option>,
           <Option value={'blue'}>Blue</Option>,
           <Option value={'purple'}>Purple</Option>,
           <Option value={'orange'}>Orange</Option>,
@@ -108,8 +115,12 @@ const IdForm = () => {
           style={classes.select}
           onChange={setFruitColor}
         >
+          <Option value={'white'}>White</Option>,
+          <Option value={'black'}>Black</Option>,
           <Option value={'green'}>Green</Option>,
+          <Option value={'grey'}>Grey</Option>,
           <Option value={'red'}>Red</Option>,
+          <Option value={'Pink'}>Pink</Option>,
           <Option value={'blue'}>Blue</Option>,
           <Option value={'purple'}>Purple</Option>,
           <Option value={'orange'}>Orange</Option>,
@@ -123,16 +134,16 @@ const IdForm = () => {
       form: (
         <Space direction='vertical'>
           <Row>
-            <Statistic title='Location' value={`Zone ${location}`} />
+            <Statistic title='Location 🌎' value={`Zone ${location}`} />
           </Row>
           <Row>
-            <Statistic title='Foliage color' value={foliageColor} />
+            <Statistic title='Foliage color 🌿' value={foliageColor} />
           </Row>
           <Row>
-            <Statistic title='Flower color' value={flowerColor} />
+            <Statistic title='Flower color 🌺' value={flowerColor} />
           </Row>
           <Row>
-            <Statistic title='Fruit color' value={fruitColor} />
+            <Statistic title='Fruit color 🍊' value={fruitColor} />
           </Row>
         </Space>
       )
